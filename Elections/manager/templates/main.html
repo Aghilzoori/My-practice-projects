@@ -1,0 +1,362 @@
+{% extends 'index.html' %}
+
+{% block blockname %}
+
+<style>
+    html,
+    body {
+        min-height: 100%;
+        margin: 0;
+        background: #0b1120 !important;
+    }
+
+    .people-page,
+    .people-page * {
+        box-sizing: border-box;
+    }
+
+    .people-page {
+        width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        padding: 30px 16px;
+        background: #0b1120;
+        color: #e5e7eb;
+        font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .people-page h1 {
+        max-width: 1100px;
+        margin: 0 auto 24px;
+        color: #f8fafc;
+        text-align: center;
+        font-size: 25px;
+    }
+
+    .boxes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 20px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .box,
+    .data-box {
+        min-width: 0;
+        overflow: auto;
+        padding: 20px;
+        background: #111827;
+        border: 1px solid #334155;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .box {
+        height: 520px;
+    }
+
+    .box h2,
+    .data-box h2 {
+        margin: 0;
+        color: #f1f5f9;
+        font-size: 19px;
+    }
+
+    .box-header,
+    .data-box-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .people-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .people-table th,
+    .people-table td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #334155;
+    }
+
+    .people-table th {
+        background: #1e293b;
+        color: #cbd5e1;
+        font-size: 14px;
+    }
+
+    .people-table td {
+        color: #e2e8f0;
+        font-size: 14px;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: #14532d;
+        color: #bbf7d0;
+        font-size: 13px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 0;
+        border-radius: 7px;
+        color: #fff;
+        font: inherit;
+        font-size: 13px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .add-button,
+    .download-button {
+        background: #2563eb;
+    }
+
+    .add-button:hover,
+    .download-button:hover {
+        background: #1d4ed8;
+    }
+
+    .edit-button {
+        background: #b45309;
+    }
+
+    .edit-button:hover {
+        background: #92400e;
+    }
+
+    .remove-button,
+    .delete-all-button {
+        background: #b91c1c;
+    }
+
+    .remove-button:hover,
+    .delete-all-button:hover {
+        background: #991b1b;
+    }
+
+    .action-buttons,
+    .data-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .action-form {
+        display: inline;
+        margin: 0;
+    }
+
+    .data-box {
+        max-width: 1100px;
+        margin: 20px auto 0;
+    }
+
+    .box::-webkit-scrollbar,
+    .table-wrapper::-webkit-scrollbar,
+    .data-box::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .box::-webkit-scrollbar-thumb,
+    .table-wrapper::-webkit-scrollbar-thumb,
+    .data-box::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 8px;
+    }
+
+    .box::-webkit-scrollbar-track,
+    .table-wrapper::-webkit-scrollbar-track,
+    .data-box::-webkit-scrollbar-track {
+        background: #111827;
+    }
+
+    @media (max-width: 700px) {
+        .boxes {
+            grid-template-columns: 1fr;
+        }
+
+        .box {
+            height: 420px;
+        }
+
+        .data-box-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .data-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .data-actions .button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<main class="people-page">
+    <h1>مدیریت افراد</h1>
+
+    <section class="boxes">
+        <!-- نتایج -->
+        <div class="box">
+            <h2 style="margin-bottom: 18px;">نتایج</h2>
+
+            <div class="table-wrapper">
+                <table class="people-table">
+                    <thead>
+                        <tr>
+                            <th>شناسه</th>
+                            <th>نام کامل</th>
+                            <th>تعداد رأی</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for row in results_vote %}
+                            <tr>
+                                <td>{{ row.candidate_id }}</td>
+                                <td>{{ row.candidate_id__fullname }}</td>
+                                <td><span class="status">{{ row.vote_count }}</span></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">نتیجه‌ای برای نمایش وجود ندارد.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- فهرست افراد -->
+        <div class="box">
+            <div class="box-header">
+                <h2>لیست افراد</h2>
+                <a class="button add-button" href="{% url 'creat-candidate' %}">افزودن</a>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="people-table">
+                    <thead>
+                        <tr>
+                            <th>شناسه</th>
+                            <th>نام کامل</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for candidate in candidates %}
+                            <tr>
+                                <td>{{ candidate.id }}</td>
+                                <td>{{ candidate.fullname }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a
+                                            class="button edit-button"
+                                            href="{% url 'edit-candidate' candidate.id %}"
+                                        >ویرایش</a>
+
+                                        <form
+                                            class="action-form"
+                                            method="post"
+                                            action="{% url 'delete-candidate' candidate.id %}"
+                                            onsubmit="return confirm('از حذف این شخص مطمئن هستید؟');"
+                                        >
+                                            {% csrf_token %}
+                                            <button class="button remove-button" type="submit">
+                                                حذف
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">فردی برای نمایش وجود ندارد.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- جزئیات داده‌ها -->
+    <section class="data-box">
+        <div class="data-box-header">
+            <h2>شرکت کنندها</h2>
+
+            <div class="data-actions">
+                <a class="button download-button" href="{% url 'export_excel' %}">
+                    دانلود اطلاعات
+                </a>
+
+                <form
+                    class="action-form"
+                    method="post"
+                    action=""
+                    onsubmit="return confirm('هشدار: همه اطلاعات مشارکت‌کنندگان حذف می‌شوند. مطمئن هستید؟');"
+                >
+                    {% csrf_token %}
+                    <button class="button delete-all-button" type="submit">
+                        حذف کامل اطلاعات
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="people-table">
+                <thead>
+                    <tr>
+                        <th>آیدی</th>
+                        <th>نام و نام‌خانوادگی</th>
+                        <th>کد ملی</th>
+                        <th>رأی</th>
+                        <th>تاریخ ایجاد</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for Participant in participants %}
+                        <tr>
+                            <td>{{ Participant.id }}</td>
+                            <td>{{ Participant.fullname }}</td>
+                            <td>{{ Participant.national_code }}</td>
+                            <td>{{ Participant.candidate_id }}</td>
+                            <td>{{ Participant.created|date:"Y/m/d H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">داده‌ای برای نمایش وجود ندارد.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+{% endblock blockname %}

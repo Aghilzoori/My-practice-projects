@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انتخابات</title>
+
+    <style>
+        .messages-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            z-index: 9999;
+            width: min(380px, calc(100% - 24px));
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            direction: rtl;
+        }
+
+        .alert {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 13px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            animation: message-in 0.25s ease-out;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .alert-icon {
+            width: 26px;
+            height: 26px;
+            flex: 0 0 26px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            font-weight: 800;
+        }
+
+        .alert-text {
+            flex: 1;
+            min-width: 0;
+            line-height: 1.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .alert-close {
+            flex: 0 0 28px;
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            padding: 0;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: inherit;
+            font-size: 25px;
+            font-weight: 700;
+            line-height: 1;
+            cursor: pointer;
+            opacity: 0.85;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .alert-success {
+            color: #105c30;
+            background: #d5f3df;
+            border-color: #75c891;
+        }
+
+        .alert-success .alert-icon {
+            color: #fff;
+            background: #249653;
+        }
+
+        .alert-error {
+            color: #8a1717;
+            background: #ffe0e0;
+            border-color: #ed8c8c;
+        }
+
+        .alert-error .alert-icon {
+            color: #fff;
+            background: #d64545;
+        }
+
+        .alert-warning {
+            color: #674700;
+            background: #fff0b8;
+            border-color: #e4c44f;
+        }
+
+        .alert-warning .alert-icon {
+            color: #fff;
+            background: #d49a00;
+        }
+
+        .alert-info {
+            color: #104c68;
+            background: #d8f1fb;
+            border-color: #76c6e2;
+        }
+
+        .alert-info .alert-icon {
+            color: #fff;
+            background: #2586aa;
+        }
+
+        .alert.is-leaving {
+            opacity:  0;
+            transform: translateY(-8px);
+        }
+
+        @keyframes message-in {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            <span class="alert-icon" aria-hidden="true">
+                {% if 'success' in message.tags %}✓
+                {% elif 'error' in message.tags %}!
+                {% elif 'warning' in message.tags %}⚠
+                {% else %}ℹ
+                {% endif %}
+            </span>
+
+            <span class="alert-text">{{ message }}</span>
+
+            <button class="alert-close" type="button" aria-label="بستن پیام">
+                ×
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block blockname %}
+    {% endblock blockname %}
+
+    <script>
+        document.querySelectorAll(".alert").forEach((alert) => {
+            function closeAlert() {
+                if (!alert.isConnected) return;
+
+                alert.classList.add("is-leaving");
+
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            }
+
+            alert.querySelector(".alert-close").addEventListener("click", closeAlert);
+
+            // بسته‌شدن خودکار پس از ۲ ثانیه
+            setTimeout(closeAlert, 2000);
+        });
+    </script>
+
+</body>
+
+</html>

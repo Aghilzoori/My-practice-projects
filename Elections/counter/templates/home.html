@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+
+
+{% block blockname %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #111827;
+        color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: #1f2937;
+        padding: 28px;
+        border: 1px solid #374151;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        text-align: center;
+    }
+
+    h1 {
+        color: #f9fafb;
+    }
+
+    button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 6px;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+    }
+
+    .counter-btn {
+        background-color: #1d4ed8;
+    }
+
+    .counter-btn:hover {
+        background-color: #1e40af;
+    }
+
+    .manager-btn {
+        background-color: #15803d;
+    }
+
+    .manager-btn:hover {
+        background-color: #166534;
+    }
+</style>
+
+<div class="container">
+    <h1>لطفا حالت ورود خود را انتخاب کنید</h1>
+    <button class="counter-btn"><a href="{% url 'vote_user' %}"
+            style="color: #fff; text-decoration: none;">ورود باجه</a></button>
+    <button class="manager-btn"><a href="{% url 'main' %}"
+            style="color: #fff; text-decoration: none;">ورود مدیر</a></button>
+</div>
+
+
+{% endblock blockname %}
